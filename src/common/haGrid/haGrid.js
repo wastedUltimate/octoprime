@@ -1,8 +1,29 @@
-angular.module( 'ngBoilerplate.haGrid', [
-  'ui.router'
-])
+(function(angular, factory){
+	'use strict';
+	
+	if(typeof define === 'function' && define.amd){
+		define(['angular'], function(angular){
+			return factory(angular);
+		});
+		
+	}else{
+		return factory(angular);
+	}
+}(angular || null, function(angular){
+	'use strinct';
 
-.directive('haGrid', ['$compile', '$parse',function($compile, $parse){
+
+var app = angular.module('haGrid', []);
+
+
+app.filter('startFrom', function(){
+	return function(input,start){
+		start = +start;
+		return input.slice(start);
+	};
+});
+
+app.directive('haGrid', ['$compile', '$parse', function($compile, $parse){
 	
 	return {
 		restrict: 'AE',
@@ -54,7 +75,7 @@ angular.module( 'ngBoilerplate.haGrid', [
 					
 					element.find('thead').remove();
 					
-					element.addClass('ng-table')
+					element.addClass('ha-grid')
 						.prepend(headerTemplate);
 					
 					$compile(headerTemplate)(scope);
@@ -64,11 +85,15 @@ angular.module( 'ngBoilerplate.haGrid', [
 		}
 		
 	};
-}])
-.run(['$templateCache', function ($templateCache) {
+}]);
+
+
+angular.module('haGrid').run(['$templateCache', function ($templateCache) {
 //	$templateCache.put('ng-table/filters/select-multiple.html', '<select ng-options="data.id as data.title for data in column.data" multiple ng-multiple="true" ng-model="params.filter()[name]" ng-show="filter==\'select-multiple\'" class="filter filter-select-multiple form-control" name="{{column.filterName}}"> </select>');
 //	$templateCache.put('ng-table/filters/select.html', '<select ng-options="data.id as data.title for data in column.data" ng-model="params.filter()[name]" ng-show="filter==\'select\'" class="filter filter-select form-control" name="{{column.filterName}}"> </select>');
 //	$templateCache.put('ng-table/filters/text.html', '<input type="text" name="{{column.filterName}}" ng-model="params.filter()[name]" ng-if="filter==\'text\'" class="input-filter form-control"/>');
 	$templateCache.put('ha-grid/header.tpl.html', '<tr> <th ng-repeat="column in $columns" class="header {{column.class}}"> <div ng-if="!template" ng-show="!template" ng-bind="parse(column.title)"></div></th></tr>');
 //	$templateCache.put('ng-table/pager.html', '<div class="ng-cloak ng-table-pager"> <div ng-if="params.settings().counts.length" class="ng-table-counts btn-group pull-right"> <button ng-repeat="count in params.settings().counts" type="button" ng-class="{\'active\':params.count()==count}" ng-click="params.count(count)" class="btn btn-default"> <span ng-bind="count"></span> </button> </div> <ul class="pagination ng-table-pagination"> <li ng-class="{\'disabled\': !page.active}" ng-repeat="page in pages" ng-switch="page.type"> <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a> <a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a> <a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a> <a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a> </li> </ul> </div> ');
 }]);
+	return app;
+}));
