@@ -1,7 +1,8 @@
 angular.module( 'ngBoilerplate', [
   'templates-app',
   'templates-common',
-//  'ngBoilerplate.home',
+  'testViews',
+  'ngBoilerplate.home',
 //  'ngBoilerplate.about',
 //  'ngBoilerplate.tasking',
 //  'haGrid',
